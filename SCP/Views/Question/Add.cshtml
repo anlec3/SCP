@@ -1,0 +1,33 @@
+﻿@model Question
+
+@{
+    ViewData["Title"] = "Soru Ekle";
+}
+
+<form method="post">
+
+    <div class="border p-3 mt-5">
+        <div class="row pb-3">
+            <h2 class="text-primary">Soru Ekle</h2>
+            <hr>
+        </div>
+
+        <div class="mb-3">
+            <label>Soru Detayı:</label>
+            <input asp-for="Text" class="form-control"/>
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="UserName" value="@User.Identity.Name" readonly class="form-control-color" hidden/>
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary" style="width:200px">Sor</button>
+
+        <a asp-controller="Question" asp-action="Index" class="btn btn-lg btn-outline-primary" style="width:200px">Sorulara Dön</a>
+
+    </div>
+
+
+</form>

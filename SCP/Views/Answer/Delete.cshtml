@@ -1,0 +1,27 @@
+﻿@model Answer
+
+@{
+    ViewData["Title"] = "Cevabı Sil";
+}
+
+<form method="post">
+
+    <div class="border p-3 mt-5">
+        <div class="row pb-3">
+            <h2 class="text-primary">Cevabı Sil</h2>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Text" class="p-0"></label>
+            <input asp-for="Text" disabled class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary" style="width:250px">Sil</button>
+
+        <a asp-controller="Answer" asp-action="Index" class="btn btn-lg btn-primary" style="width:250px">
+            Cevaplara Dön
+        </a>
+
+    </div>
+
+</form>

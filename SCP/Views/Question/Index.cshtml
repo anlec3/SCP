@@ -1,0 +1,67 @@
+﻿@model List<Question>
+
+@{
+    ViewData["Title"] = "Sorular";
+}
+
+@if (TempData["success"] != null)
+{
+    <h2>@TempData["success"]</h2>
+}
+
+<div class="container">
+
+    <div class="row pt-3 pb-4">
+        <div>
+            <h1>Sorular</h1>
+        </div>
+   </div>
+   
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Soru
+                </th>
+                <th>
+                    Soran
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var Question in Model)
+            {
+                <tr>
+                    <td>@Question.Text</td>
+                    <td>@Question.UserName</td>
+                    <td>
+                        <a asp-controller="Answer" asp-action="GetQuestionAndAnswers" asp-route-questionId="@Question.Id" type="button" class="btn btn-primary" style="width:150px">Cevaplar</a>
+                    </td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <td>
+                                <a asp-controller="Question" asp-action="Delete" asp-route-id="@Question.Id" type="button" class="btn btn-danger" style="width:150px">Soruyu Sil</a>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    <div class="row pt-3 pb-2">
+        <div>
+            <a asp-controller="Question" asp-action="Add" class="btn-lg btn-primary">
+                Soru Ekle
+            </a>
+        </div>
+
+    </div>
+
+</div>

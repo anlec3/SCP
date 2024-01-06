@@ -1,0 +1,64 @@
+﻿@model List<Answer>
+
+@{
+    ViewData["Title"] = "Cevaplar";
+}
+
+@if (TempData["success"] != null)
+{
+    <h2>@TempData["success"]</h2>
+}
+
+<div class="container">
+
+    <div class="row pt-3 pb-4">
+        <div>
+            <h1>Cevaplar</h1>
+        </div>
+   </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Cevap
+                </th>
+                <th>
+                    Cevap Veren
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var answer in Model)
+            {
+                <tr>
+                    <td>@answer.Text</td>
+                    <td>@answer.UserName</td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <td>
+                                <a asp-controller="Answer" asp-action="Delete" asp-route-id="@answer.Id" type="button" class="btn btn-danger" style="width:150px">Cevabı Sil</a>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    <div class="row pt-3 pb-2">
+        <div>
+            <a asp-controller="Answer" asp-action="Add" class="btn-lg btn-primary">
+                Cevap Ekle
+            </a>
+        </div>
+
+    </div>
+
+</div>
