@@ -10,10 +10,10 @@ namespace SCP.Controllers
         private readonly IQuestionRepository _questionRepository;
         private readonly AppDbContext _appDbContext;
 
-        public QuestionController(IQuestionRepository context, AppDbContext appDb)
+        public QuestionController(IQuestionRepository context, AppDbContext appDbContext)
         {
             _questionRepository = context;
-            _appDbContext = appDb;
+            _appDbContext = appDbContext;
         }
         public IActionResult Index(string searchText = "", int page = 1, int size = 6)
         {

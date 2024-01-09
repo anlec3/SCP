@@ -101,7 +101,7 @@ namespace SCP.Controllers
             }
             _answerRepository.Delete(answer);
             _answerRepository.Save();
-            return RedirectToAction("Index", "Answer");
+            return RedirectToAction("Index", "Question");
         }
 
         public IActionResult GetQuestionAndAnswers(int questionId, string searchText = "", int page = 1, int size = 6)
