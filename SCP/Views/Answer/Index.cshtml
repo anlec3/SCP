@@ -62,3 +62,38 @@
     </div>
 
 </div>
+
+<ul class="pagination">
+    @for (int i = 1; i <= ViewBag.PageCount; i++)
+    {
+        if (i == ViewBag.Page)
+        {
+            <li class="page-item active"><a class="page-link" asp-route-searchtext="@ViewBag.SearchText" asp-route-page="@i" asp-route-size=@ViewBag.Size>@i</a></li>
+        }
+        else
+        {
+            <li class="page-item"><a class="page-link" asp-route-searchtext="@ViewBag.SearchText" asp-route-page="@i" asp-route-size=@ViewBag.Size>@i</a></li>
+        }
+
+    }
+
+
+
+</ul>
+
+<ul class="pagination">
+    @for (int i = 5; i <= 25; i = i + 5)
+    {
+        if (i == ViewBag.Size)
+        {
+            <li class="page-item active"><a class="page-link" asp-route-searchtext="@ViewBag.SearchText" asp-route-page="@ViewBag.page" asp-route-size="@i">@i</a></li>
+        }
+        else
+        {
+            <li class="page-item "><a class="page-link" asp-route-searchtext="@ViewBag.SearchText" asp-route-page="@ViewBag.page" asp-route-size="@i">@i</a></li>
+        }
+    }
+
+
+
+</ul>

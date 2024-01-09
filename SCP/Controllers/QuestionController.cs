@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SCP.Models;
 
 namespace SCP.Controllers
@@ -7,15 +8,36 @@ namespace SCP.Controllers
     public class QuestionController : Controller
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly AppDbContext _appDbContext;
 
-        public QuestionController(IQuestionRepository context)
+        public QuestionController(IQuestionRepository context, AppDbContext appDb)
         {
             _questionRepository = context;
+            _appDbContext = appDb;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchText = "", int page = 1, int size = 6)
         {
-            List<Question> objQuestion= _questionRepository.GetAll().ToList();
-            return View(objQuestion);
+            var question = _appDbContext.Questions.Where(s => s.Text.ToLower().Contains(searchText.ToLower())).AsQueryable();
+
+            int pageskip = (page - 1) * size;
+            var Question = question.Skip(pageskip).Take(size).Select(x => new Question()
+            {
+                Id = x.Id,
+                Text = x.Text,
+                UserName = x.UserName,
+               
+            }).ToList();
+            int recordCount = question.Count();
+            int pageCount = (int)Math.Ceiling(Convert.ToDecimal(recordCount / size));
+
+
+            ViewBag.PageCount = pageCount;
+            ViewBag.RecordCount = recordCount;
+            ViewBag.Page = page;
+            ViewBag.Size = size;
+            ViewBag.SearchText = searchText;
+
+            return View(Question);
         }
 
         [Authorize]

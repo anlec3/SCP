@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SCP.Models;
+using System.Drawing;
+using System.Security.Policy;
 
 namespace SCP.Controllers
 {
@@ -18,10 +20,29 @@ namespace SCP.Controllers
             _questionRepository = questionRepository;
             _appDbContext = appDbContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchText = "", int page = 1, int size = 6)
         {
-            List<Answer> objAnswer = _answerRepository.GetAll().ToList();
-            return View(objAnswer);
+            var answer = _appDbContext.Answers.Where(s => s.Text.ToLower().Contains(searchText.ToLower())).AsQueryable();
+
+            int pageskip = (page - 1) * size;
+            var Answer = answer.Skip(pageskip).Take(size).Select(x => new Answer()
+            {
+                Id = x.Id,
+                Text = x.Text,
+                UserName = x.UserName,
+
+            }).ToList();
+            int recordCount = answer.Count();
+            int pageCount = (int)Math.Ceiling(Convert.ToDecimal(recordCount / size));
+
+
+            ViewBag.PageCount = pageCount;
+            ViewBag.RecordCount = recordCount;
+            ViewBag.Page = page;
+            ViewBag.Size = size;
+            ViewBag.SearchText = searchText;
+
+            return View(Answer);
         }
         
         [Authorize]
@@ -83,11 +104,31 @@ namespace SCP.Controllers
             return RedirectToAction("Index", "Answer");
         }
 
-        public IActionResult GetQuestionAndAnswers(int questionId)
+        public IActionResult GetQuestionAndAnswers(int questionId, string searchText = "", int page = 1, int size = 6)
         {
             List<Answer> objAnswer = _appDbContext.Answers
                                 .Where(a => a.QuestionId == questionId)
                                 .ToList();
+
+            var answer = _appDbContext.Answers.Where(s => s.Text.ToLower().Contains(searchText.ToLower())).AsQueryable();
+
+            int pageskip = (page - 1) * size;
+            var Answer = answer.Skip(pageskip).Take(size).Select(x => new Answer()
+            {
+                Id = x.Id,
+                Text = x.Text,
+                UserName = x.UserName,
+
+            }).ToList();
+            int recordCount = answer.Count();
+            int pageCount = (int)Math.Ceiling(Convert.ToDecimal(recordCount / size));
+
+
+            ViewBag.PageCount = pageCount;
+            ViewBag.RecordCount = recordCount;
+            ViewBag.Page = page;
+            ViewBag.Size = size;
+            ViewBag.SearchText = searchText;
 
             return View(objAnswer);
         }
